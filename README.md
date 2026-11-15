@@ -93,3 +93,11 @@ PRs welcome. Please keep the vibecoded energy 🎨🔥
 ---
 
 **Built for creators who value privacy and self-reliance.**
+
+---
+
+## 🙏 Credits
+
+This project is a Linux self-hosted port of **[SCENEPAINT](https://github.com/TridentVibes/SCENEPAINT)** by **[TridentVibes](https://github.com/TridentVibes)** — the original [Project Deep Brush](https://github.com/TridentVibes/SCENEPAINT) open source digital painting & animation tool.
+
+Original concept, design, and source by [@TridentVibes](https://github.com/TridentVibes).
