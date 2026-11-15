@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScenePaint</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- Top bar -->
+  <div id="topbar">
+    <div class="topbar-left">
+      <span class="logo">SCENEPAINT</span>
+      <button onclick="newProject()" title="New Project">📄 New</button>
+      <button onclick="openFile()" title="Open Project">📂 Open</button>
+      <button onclick="saveProject()" title="Save Project">💾 Save</button>
+      <button onclick="exportPNG()" title="Export PNG">🖼 PNG</button>
+      <button onclick="exportGIF()" title="Export GIF">🎞 GIF</button>
+      <button onclick="exportMP4()" title="Export MP4">🎬 MP4</button>
+      <input type="file" id="fileInput" accept=".scenepaint,.zip,.png,.jpg,.jpeg" style="display:none">
+    </div>
+    <div class="topbar-center" id="statusBar">Ready</div>
+    <div class="topbar-right">
+      <button onclick="undo()" title="Undo (Ctrl+Z)">↩</button>
+      <button onclick="redo()" title="Redo (Ctrl+Shift+Z)">↪</button>
+      <span id="zoomDisplay">100%</span>
+      <button onclick="zoomIn()">+</button>
+      <button onclick="zoomOut()">−</button>
+      <button onclick="fitCanvas()">Fit</button>
+    </div>
+  </div>
+
+  <!-- Main workspace -->
+  <div id="workspace">
+    <!-- Left tool rail -->
+    <div id="toolrail">
+      <button class="tool-btn active" data-tool="brush" onclick="setTool('brush')" title="Brush (A)">
+        <span class="tool-icon">🖌</span>
+        <span class="tool-label">Brush</span>
+      </button>
+      <button class="tool-btn" data-tool="eraser" onclick="setTool('eraser')" title="Eraser (E)">
+        <span class="tool-icon">🧹</span>
+        <span class="tool-label">Eraser</span>
+      </button>
+      <button class="tool-btn" data-tool="bucket" onclick="setTool('bucket')" title="Bucket Fill (B)">
+        <span class="tool-icon">🪣</span>
+        <span class="tool-label">Bucket</span>
+      </button>
+      <button class="tool-btn" data-tool="text" onclick="setTool('text')" title="Text (T)">
+        <span class="tool-icon">🔤</span>
+        <span class="tool-label">Text</span>
+      </button>
+      <button class="tool-btn" data-tool="outline" onclick="setTool('outline')" title="Outline (O)">
+        <span class="tool-icon">⬒</span>
+        <span class="tool-label">Outline</span>
+      </button>
+      <button class="tool-btn" data-tool="move" onclick="setTool('move')" title="Move (V)">
+        <span class="tool-icon">✥</span>
+        <span class="tool-label">Move</span>
+      </button>
+      <div class="rail-divider"></div>
+      <div class="color-section">
+        <label>Ink Color</label>
+        <input type="color" id="colorPicker" value="#ffffff" onchange="setColor(this.value)">
+        <div class="color-presets">
+          <span class="color-swatch" style="background:#ffffff" onclick="setColor('#ffffff')"></span>
+          <span class="color-swatch" style="background:#ff4444" onclick="setColor('#ff4444')"></span>
+          <span class="color-swatch" style="background:#44ff44" onclick="setColor('#44ff44')"></span>
+          <span class="color-swatch" style="background:#4444ff" onclick="setColor('#4444ff')"></span>
+          <span class="color-swatch" style="background:#ffaa00" onclick="setColor('#ffaa00')"></span>
+          <span class="color-swatch" style="background:#ff44ff" onclick="setColor('#ff44ff')"></span>
+          <span class="color-swatch" style="background:#000000" onclick="setColor('#000000')"></span>
+        </div>
+      </div>
+      <div class="rail-divider"></div>
+      <div class="brush-section">
+        <label>Brush Size: <span id="brushSizeVal">8</span>px</label>
+        <input type="range" id="brushSize" min="1" max="100" value="8" oninput="setBrushSize(this.value)">
+        <label>Opacity: <span id="opacityVal">100</span>%</label>
+        <input type="range" id="opacitySlider" min="1" max="100" value="100" oninput="setOpacity(this.value)">
+        <label>Feather: <span id="featherVal">0</span>px</label>
+        <input type="range" id="featherSlider" min="0" max="20" value="0" oninput="setFeather(this.value)">
+      </div>
+      <div class="rail-divider"></div>
+      <div class="analysis-section">
+        <button onclick="analyzePhoto()" id="analyzeBtn" disabled>🧠 Analyze Photo</button>
+        <button onclick="importDepthMap()" id="importDepthBtn" disabled>📐 Import Depth</button>
+      </div>
+      <div class="rail-divider"></div>
+      <div class="motion-section">
+        <label>Motion Effects</label>
+        <select id="effectType">
+          <option value="boil">Boil</option>
+          <option value="blink">Blink</option>
+          <option value="glitch">Glitch</option>
+          <option value="emission">Emission</option>
+          <option value="light_spill">Light Spill</option>
+        </select>
+        <label>Intensity: <span id="intensityVal">50</span>%</label>
+        <input type="range" id="intensitySlider" min="1" max="100" value="50" oninput="setIntensity(this.value)">
+        <label>Speed: <span id="speedVal">1.0</span>x</label>
+        <input type="range" id="speedSlider" min="1" max="50" value="10" oninput="setSpeed(this.value)">
+        <label>Frames: <span id="framesVal">60</span></label>
+        <input type="range" id="framesSlider" min="10" max="300" value="60" step="10" oninput="setFrames(this.value)">
+        <button onclick="previewEffect()" id="previewBtn">▶ Preview</button>
+        <button onclick="exportGIF()">📥 GIF</button>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Canvas area -->
+    <div id="canvas-area">
+      <div id="canvas-container">
+        <canvas id="main-canvas"></canvas>
+      </div>
+      <div id="canvas-info">
+        <span id="canvasSize">0 × 0</span>
+        <span id="cursorPos">0, 0</span>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Right sidebar -->
+    <div id="sidebar">
+      <div class="sidebar-tabs">
+        <button class="tab active" data-tab="layers" onclick="switchTab('layers')">Layers</button>
+        <button class="tab" data-tab="brush" onclick="switchTab('brush')">Brush</button>
+        <button class="tab" data-tab="text" onclick="switchTab('text')">Text</button>
+        <button class="tab" data-tab="surface" onclick="switchTab('surface')">Surface</button>
+        <button class="tab" data-tab="light" onclick="switchTab('light')">Light</button>
+        <button class="tab" data-tab="motion" onclick="switchTab('motion')">Motion</button>
+      </div>
+
+      <!-- Layers panel -->
+      <div id="panel-layers" class="panel active">
+        <div class="panel-header">
+          <span>Layers</span>
+          <button onclick="addLayer()" class="small-btn">+ Add</button>
+        </div>
+        <div id="layerList" class="layer-list"></div>
+      </div>
+
+      <!-- Brush panel -->
+      <div id="panel-brush" class="panel">
+        <div class="panel-header"><span>Brush Settings</span></div>
+        <div class="panel-content">
+          <label>Size: <span id="panelBrushSize">8</span>px</label>
+          <input type="range" min="1" max="100" value="8" onchange="setBrushSize(this.value); document.getElementById('brushSize').value=this.value; document.getElementById('brushSizeVal').textContent=this.value">
+          <label>Opacity: <span id="panelOpacity">100</span>%</label>
+          <input type="range" min="1" max="100" value="100" onchange="setOpacity(this.value); document.getElementById('opacitySlider').value=this.value; document.getElementById('opacityVal').textContent=this.value">
+          <label>Hardness: <span id="panelHardness">100</span>%</label>
+          <input type="range" min="0" max="100" value="100" onchange="setHardness(this.value)">
+          <label>Spacing: <span id="panelSpacing">25</span>%</label>
+          <input type="range" min="1" max="100" value="25" onchange="setSpacing(this.value)">
+        </div>
+      </div>
+
+      <!-- Text panel -->
+      <div id="panel-text" class="panel">
+        <div class="panel-header"><span>Text Settings</span></div>
+        <div class="panel-content">
+          <label>Font:</label>
+          <select id="fontFamily">
+            <option value="sans-serif">Sans Serif</option>
+            <option value="serif">Serif</option>
+            <option value="monospace">Monospace</option>
+            <option value="cursive">Cursive</option>
+          </select>
+          <label>Size: <span id="panelTextSize">24</span>px</label>
+          <input type="range" min="8" max="200" value="24" onchange="setTextSize(this.value); document.getElementById('fontSlider').value=this.value; document.getElementById('fontSliderVal').textContent=this.value">
+          <label>
+            <input type="checkbox" id="textBold"> Bold
+          </label>
+          <label>
+            <input type="checkbox" id="textItalic"> Italic
+          </label>
+          <div class="color-section">
+            <label>Color</label>
+            <input type="color" id="textColor" value="#ffffff">
+          </div>
+        </div>
+      </div>
+
+      <!-- Surface panel -->
+      <div id="panel-surface" class="panel">
+        <div class="panel-header"><span>Surface / 3D</span></div>
+        <div class="panel-content">
+          <button onclick="analyzePhoto()">🧠 Analyze Depth</button>
+          <label>Depth Intensity</label>
+          <input type="range" min="0" max="100" value="50" id="depthIntensity">
+          <label>Mesh Density</label>
+          <input type="range" min="4" max="32" value="16" id="meshDensity">
+          <label>
+            <input type="checkbox" id="showGrid"> Show Grid
+          </label>
+          <label>
+            <input type="checkbox" id="showNormals"> Show Normals
+          </label>
+          <div id="depthPreview" class="depth-preview hidden">
+            <p>Depth map will appear here after analysis.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Light panel -->
+      <div id="panel-light" class="panel">
+        <div class="panel-header"><span>Lighting</span></div>
+        <div class="panel-content">
+          <label>Intensity: <span id="lightIntensity">50</span></label>
+          <input type="range" min="0" max="100" value="50" id="lightSlider" oninput="setLightIntensity(this.value)">
+          <label>Angle: <span id="lightAngle">45</span>°</label>
+          <input type="range" min="0" max="360" value="45" id="lightAngleSlider" oninput="setLightAngle(this.value)">
+          <label>Height: <span id="lightHeight">30</span></label>
+          <input type="range" min="0" max="100" value="30" id="lightHeightSlider" oninput="setLightHeight(this.value)">
+          <label>Color</label>
+          <input type="color" id="lightColor" value="#ffffff">
+          <div class="light-preview" id="lightPreview"></div>
+        </div>
+      </div>
+
+      <!-- Motion panel -->
+      <div id="panel-motion" class="panel">
+        <div class="panel-header"><span>Motion Effects</span></div>
+        <div class="panel-content">
+          <select id="motionEffectType">
+            <option value="boil">Boil</option>
+            <option value="blink">Blink</option>
+            <option value="glitch">Glitch</option>
+            <option value="emission">Emission</option>
+            <option value="light_spill">Light Spill</option>
+          </select>
+          <label>Intensity: <span id="motionIntensity">50</span>%</label>
+          <input type="range" min="1" max="100" value="50" id="motionIntensitySlider" oninput="document.getElementById('motionIntensity').textContent=this.value">
+          <label>Speed: <span id="motionSpeed">1.0</span>x</label>
+          <input type="range" min="1" max="50" value="10" id="motionSpeedSlider" oninput="document.getElementById('motionSpeed').textContent=(this.value/10).toFixed(1)">
+          <label>Duration: <span id="motionDuration">2</span>s</label>
+          <input type="range" min="1" max="10" value="2" id="motionDurationSlider" oninput="document.getElementById('motionDuration').textContent=this.value">
+          <button onclick="previewEffect()">▶ Preview</button>
+          <button onclick="exportGIF()">📥 GIF</button>
+          <button onclick="exportMP4()">📥 MP4</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress overlay -->
+  <div id="progressOverlay" class="hidden">
+    <div class="progress-box">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <span id="progressText">Processing...</span>
+    </div>
+  </div>
+
+  <!-- Text input popup -->
+  <div id="textPopup" class="hidden">
+    <input type="text" id="textInput" placeholder="Type text...">
+    <button onclick="commitText()">OK</button>
+    <button onclick="cancelText()">Cancel</button>
+  </div>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

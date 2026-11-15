@@ -1,0 +1,13 @@
+__pycache__
+*.pyc
+venv
+.env
+.git
+tests
+*.md
+docs
+data/default_assets
+models/*.onnx
+*.scenepaint
+.DS_Store
+*.log
