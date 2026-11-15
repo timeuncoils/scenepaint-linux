@@ -1,11 +1,17 @@
 # 🎨 Selfhosted Deep Brush
 
-> Vibecoded digital painting & animation studio. Self-hosted, browser-based, zero cloud dependency.
+> A self-hosted, Dockerizable port of **SCENEPAINT** — the **Adobe MAX 2026** Project Deep Brush concept that was vibe-coded by [@TridentVibes](https://github.com/TridentVibes) and later integrated into Adobe apps.
 
 [![vibecoded](https://img.shields.io/badge/vibecoded-%23FF6B35?style=for-the-badge&logo=github)](https://github.com/timeuncoils/scenepaint-linux)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/)
+[![Adobe MAX 2026](https://img.shields.io/badge/Adobe%20MAX-2026-001E3F?style=for-the-badge)](https://max.adobe.com/)
+
+## 📖 Story
+
+**Project Deep Brush** was showcased at **Adobe MAX 2026** — a revolutionary digital painting & animation concept. [@TridentVibes](https://github.com/TridentVibes) vibe-coded **SCENEPAINT**, an open-source macOS version of that concept, which was later integrated into Adobe's own apps.
+
+This project is our **self-hosted, Dockerizable Linux port** — bringing the same creative power to anyone, anywhere, without cloud dependency.
 
 ## ✨ Features
 
@@ -38,10 +44,6 @@ API docs at **http://localhost:8001/docs**
 - **Image Processing:** Pillow, NumPy, OpenCV
 - **Video:** FFmpeg integration
 - **Deployment:** Docker + docker-compose
-
-## 📸 Screenshots
-
-![ScenePaint Web](https://i.imgur.com/placeholder.png)
 
 ## 📁 Project Structure
 
@@ -86,18 +88,10 @@ scenepaint-linux/
 
 MIT — vibecoded with 💛
 
-## 🤝 Contributing
-
-PRs welcome. Please keep the vibecoded energy 🎨🔥
-
----
-
-**Built for creators who value privacy and self-reliance.**
-
----
-
 ## 🙏 Credits
 
-This project is a Linux self-hosted port of **[SCENEPAINT](https://github.com/TridentVibes/SCENEPAINT)** by **[TridentVibes](https://github.com/TridentVibes)** — the original [Project Deep Brush](https://github.com/TridentVibes/SCENEPAINT) open source digital painting & animation tool.
+This project is a self-hosted, Linux/Docker port of **[SCENEPAINT](https://github.com/TridentVibes/SCENEPAINT)** by **[TridentVibes](https://github.com/TridentVibes)**.
+
+**SCENEPAINT** was vibe-coded by @TridentVibes as an open-source implementation of the **Project Deep Brush** concept originally showcased at **Adobe MAX 2026**, later integrated into Adobe apps.
 
 Original concept, design, and source by [@TridentVibes](https://github.com/TridentVibes).
