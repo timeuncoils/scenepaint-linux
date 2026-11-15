@@ -1,15 +1,10 @@
 # 🎨 Selfhosted Deep Brush
 
-> A self-hosted, Dockerizable port of **SCENEPAINT** — the **Adobe MAX 2026** Project Deep Brush concept that was vibe-coded by [@TridentVibes](https://github.com/TridentVibes) and later integrated into Adobe apps.
-
-[![vibecoded](https://img.shields.io/badge/vibecoded-%23FF6B35?style=for-the-badge&logo=github)](https://github.com/timeuncoils/scenepaint-linux)
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
-[![Adobe MAX 2026](https://img.shields.io/badge/Adobe%20MAX-2026-001E3F?style=for-the-badge)](https://max.adobe.com/)
+> A self-hosted, Dockerizable port of **SCENEPAINT** — the **Adobe MAX 2026** Project Deep Brush concept that was made into a mac app by [@TridentVibes](https://github.com/TridentVibes).
 
 ## 📖 Story
 
-**Project Deep Brush** was showcased at **Adobe MAX 2026** — a revolutionary digital painting & animation concept. [@TridentVibes](https://github.com/TridentVibes) vibe-coded **SCENEPAINT**, an open-source macOS version of that concept, which was later integrated into Adobe's own apps.
+**Project Deep Brush** was showcased at **Adobe MAX 2026** — a revolutionary digital painting concept. [@TridentVibes](https://github.com/TridentVibes) vibe-coded **SCENEPAINT**, an open-source macOS version of that concept.
 
 This project is our **self-hosted, Dockerizable Linux port** — bringing the same creative power to anyone, anywhere, without cloud dependency.
 
@@ -92,6 +87,6 @@ MIT — vibecoded with 💛
 
 This project is a self-hosted, Linux/Docker port of **[SCENEPAINT](https://github.com/TridentVibes/SCENEPAINT)** by **[TridentVibes](https://github.com/TridentVibes)**.
 
-**SCENEPAINT** was vibe-coded by @TridentVibes as an open-source implementation of the **Project Deep Brush** concept originally showcased at **Adobe MAX 2026**, later integrated into Adobe apps.
+**SCENEPAINT** was vibe-coded by @TridentVibes as an open-source implementation of the **Project Deep Brush** concept originally showcased at **Adobe MAX 2026**.
 
 Original concept, design, and source by [@TridentVibes](https://github.com/TridentVibes).
