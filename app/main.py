@@ -143,17 +143,18 @@ def create_layer(project_id: str):
 
 
 @app.put("/api/projects/{project_id}/layers/{layer_id}")
-def update_layer(project_id: str, layer_id: str, name: str = Form(None), opacity: float = Form(None), visible: bool = Form(None)):
+def update_layer(project_id: str, layer_id: str, body: dict = None):
     state = _get_state(project_id)
     layer = state["doc"].get_layer(layer_id)
     if not layer:
         raise HTTPException(404, "Layer not found")
-    if name:
-        layer.name = name
-    if opacity is not None:
-        layer.opacity = max(0, min(1, opacity))
-    if visible is not None:
-        layer.visible = visible
+    if body:
+        if "name" in body:
+            layer.name = body["name"]
+        if "opacity" in body:
+            layer.opacity = max(0, min(1, body["opacity"]))
+        if "visible" in body:
+            layer.visible = body["visible"]
     return {"ok": True}
 
 
@@ -172,9 +173,12 @@ def move_layer(project_id: str, body: LayerMove):
 
 
 @app.post("/api/projects/{project_id}/active-layer")
-def set_active_layer(project_id: str, layer_id: str = Form(...)):
+def set_active_layer(project_id: str, body: dict = None):
     state = _get_state(project_id)
-    state["doc"].set_active_layer(layer_id)
+    lid = (body or {}).get("layer_id")
+    if not lid:
+        raise HTTPException(400, "layer_id required")
+    state["doc"].set_active_layer(lid)
     return {"ok": True}
 
 
@@ -231,11 +235,14 @@ def import_image(project_id: str, file: UploadFile = File(...)):
 
 
 @app.post("/api/projects/{project_id}/clear-layer")
-def clear_layer(project_id: str, layer_id: str = Form(...)):
+def clear_layer(project_id: str, body: dict = None):
+    lid = (body or {}).get("layer_id")
+    if not lid:
+        raise HTTPException(400, "layer_id required")
     state = _get_state(project_id)
-    layer = state["doc"].get_layer(layer_id)
+    layer = state["doc"].get_layer(lid)
     if layer:
-        from PIL import Image, ImageDraw
+        from PIL import Image
         layer.image = Image.new("RGBA", (state["doc"].width, state["doc"].height), (0, 0, 0, 0))
     return {"ok": True}
 
@@ -250,7 +257,7 @@ def apply_motion_effect(project_id: str, effect: MotionEffect):
         "boil": EffectType.BOIL,
         "blink": EffectType.BLINK,
         "glitch": EffectType.GLITCH,
-        "emission": EffectTypeEMISSION,
+        "emission": EffectType.EMISSION,
         "light_spill": EffectType.LIGHT_SPILL,
     }
     etype = effect_type_map.get(effect.effect_type)
@@ -285,7 +292,7 @@ def export_gif(project_id: str, effect: MotionEffect):
         "boil": EffectType.BOIL,
         "blink": EffectType.BLINK,
         "glitch": EffectType.GLITCH,
-        "emission": EffectTypeEMISSION,
+        "emission": EffectType.EMISSION,
         "light_spill": EffectType.LIGHT_SPILL,
     }
     etype = effect_type_map.get(effect.effect_type)
@@ -330,7 +337,7 @@ def export_mp4(project_id: str, effect: MotionEffect):
         "boil": EffectType.BOIL,
         "blink": EffectType.BLINK,
         "glitch": EffectType.GLITCH,
-        "emission": EffectTypeEMISSION,
+        "emission": EffectType.EMISSION,
         "light_spill": EffectType.LIGHT_SPILL,
     }
     etype = effect_type_map.get(effect.effect_type)

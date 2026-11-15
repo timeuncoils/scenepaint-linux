@@ -86,8 +86,9 @@ class Document:
             image=image,
         )
         self.layers.append(layer)
+        # Always set active layer; on init it becomes the background
+        self.active_layer_id = layer.id
         if not is_init:
-            self.active_layer_id = layer.id
             self.history.append(HistoryEntry(
                 layer_id=layer.id,
                 action="create",
@@ -146,6 +147,8 @@ class Document:
                 r, g, b, a = img.split()
                 a = a.point(lambda x: int(x * layer.opacity))
                 img = Image.merge("RGBA", (r, g, b, a))
+            else:
+                img = layer.image
             # Paste with offset
             paste_x = layer.x_offset
             paste_y = layer.y_offset

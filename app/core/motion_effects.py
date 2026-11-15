@@ -36,7 +36,7 @@ class MotionRenderer:
             frames = self._blink(base, intensity, speed, num_frames)
         elif effect_type == EffectType.GLITCH:
             frames = self._glitch(base, intensity, speed, num_frames)
-        elif effect_type == EffectTypeEMISSION:
+        elif effect_type == EffectType.EMISSION:
             frames = self._emission(base, intensity, speed, num_frames)
         elif effect_type == EffectType.LIGHT_SPILL:
             frames = self._light_spill(base, intensity, speed, num_frames)
